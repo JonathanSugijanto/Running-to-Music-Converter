@@ -398,7 +398,7 @@ void setup() {
     #endif
 
     //begin serial
-    //Serial.begin(115200);
+    Serial.begin(115200);
 
     // initialize device
     mpu.initialize();
@@ -452,11 +452,11 @@ void loop() {
         mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
        
         az=2.*9.8*float(aaWorld.z)/32767.;//output vertical acceleration
-        // Serial.print(aThreshold);
-        // Serial.print("  ");
-        // Serial.print(tick%2);
-        // Serial.print("  ");
-        // Serial.println(az);
+        Serial.print(aThreshold);
+        Serial.print("  ");
+        Serial.print(float(tick%2)/4);
+        Serial.print("  ");
+        Serial.println(az);
        
         if(az>aThreshold){ //if vertical acceleration is higher than the threshold
           if(!lastTickCheck){ //if sebelumnya vertical acceleration less than threshold
