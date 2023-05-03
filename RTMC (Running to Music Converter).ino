@@ -7,13 +7,13 @@
 
 //myVariable
 MPU6050 mpu;
-int dt=10; //mpu data processing delay utk mulusin jalannya mesin
+int dt=10; //mpu data processing delay untuk melancarkan processing
 float aThreshold=0.25; //percepatan ke atas minimal agar langkah dihitung
-int dThreshold=2; //lama minimal a>aThreshold agar langkah kehitung. lama=(dThreshold * dt)ms
+int dThreshold=2; //lama minimal a>aThreshold agar langkah terhitung. lama=(dThreshold * dt)ms
 int bpm=120; //default bpm
-#define songCount 3 //kalau jumlahnya diubh, ubh jg fungsi chooseSong(int choosed) dan array songLength[]
-#define defaultSong song2 //ubh jg variable *song dan choosed
-#define dStopRun 3000 //brp ms sampe dihitung berhenti lari
+#define songCount 3 //kalau jumlahnya diubh, ubh pula fungsi chooseSong(int choosed) dan array songLength[]
+#define defaultSong song2 //Cupid  Jika ingin diubah, ubh jg variable *song dan choosed
+#define dStopRun 3000 //brp ms sampai dianggap berhenti lari
 #define chooseAlarm 3 //alarm itu song brp?
 
 
@@ -111,7 +111,7 @@ int bpm=120; //default bpm
 
 
 //earphone variable
-int songBpm[]={104,168,119,120};
+int songBpm[]={104,168,119,120}; //bpm normal tiap song
 #define earpin 5
 
 const PROGMEM int song0[]={0,4,
@@ -398,7 +398,7 @@ void setup() {
     #endif
 
     //begin serial
-    Serial.begin(115200);
+    Serial.begin(115200); //silahkan comment bagian ini jika tidak menggunakn Serial
 
     // initialize device
     mpu.initialize();
@@ -452,6 +452,7 @@ void loop() {
         mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
        
         az=2.*9.8*float(aaWorld.z)/32767.;//output vertical acceleration
+        //Print bentuk wave percepatan vertikal dan deteksi langkah secara Serial. Silahkan comment jika tidak menggunakan Serial
         Serial.print(aThreshold);
         Serial.print("  ");
         Serial.print(float(tick%2)/4);
@@ -461,7 +462,7 @@ void loop() {
         if(az>aThreshold){ //if vertical acceleration is higher than the threshold
           if(!lastTickCheck){ //if sebelumnya vertical acceleration less than threshold
             dCount++;
-            if(dCount>=dThreshold){
+            if(dCount>=dThreshold){ //if vertical acceleration lebih dari threshold for dThreshold long
               tick++; //jml langkah
               if(!stopRun){
                 dtick=millis()-t0;
@@ -470,7 +471,7 @@ void loop() {
               lastTickCheck=true;
 
               // blink LED to indicate activity
-              blinkState = !blinkState;
+              blinkState = !blinkState; //LED mati-nyala ketika langkah terhitung
               digitalWrite(LED_PIN, blinkState);
             }
           }
@@ -500,7 +501,7 @@ void loop() {
       }
       if(100*(millis()-tRef)/duration < 95 && pgm_read_word_near(&song[2*x])!=rest){
         tone(earpin,pgm_read_word_near(&song[2*x]));
-      } else{
+      } else{ 
         noTone(earpin);
       }
       if(x!=x0){
